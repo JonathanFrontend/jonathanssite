@@ -10,6 +10,9 @@ export const suits = ['♥', '♦', '♣', '♠'];
 
 function App() {
   const [deck, setDeck] = useState([]);
+  const [playerCards, setPlayerCards] = useState([]);
+  const [dealerCards, setDealerCards] = useState([]);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     const cards = [];
@@ -20,46 +23,131 @@ function App() {
       cards.push(newCard);
     }
   }
-  
-  console.log(cards);
-  console.log(cards.length);
 
   setDeck(cards);
   }, [])
 
+  useEffect(() => {
+    console.log(playerCards);
+    let counter = 0;
+    for (const c of [...playerCards]) {
+      counter = counter + c.value;
+    }
+    if (counter === 21) {
+      alert("du vann!");
+      setShowAll(true);
+    } else if (counter > 21) {
+      alert("du förlorade!");
+      setShowAll(true);
+    }
+
+    console.log("counter",counter);
+
+    let deckCopy = [...deck];
+    let randomDeckIndex = Math.floor(Math.random() * deck.length);
+    let randomCard = deckCopy.splice(randomDeckIndex, 1);
+    setDealerCards([...dealerCards].concat(randomCard));
+
+  }, [playerCards])
+
+  useEffect(()=>{
+    console.log(playerCards);
+    console.log(dealerCards);
+  })
   let card = deck[0];
   
   return (
     <div className="App">
-      <button onClick={() => setDeck([...deck].sort((a,b) => 0.5 - Math.random()))}>
-        Blanda!
-      </button>
       {/* {
-        deck.map((card, i) => <aside className={`card card-${card.suit}`} key={i}>
-          {
-            <>
-            <h1>
-              {
-              (
-                (card.value == 14) && 'A' || 
-                (card.value == 11) && 'J' ||
-                (card.value == 12) && 'Q' ||
-                (card.value == 13) && 'K' 
-              ) || card.value
-              }
-            </h1>
-            <h2>
-            {
-              suits[card.suit-1]
+        (
+          () => {
+            console.log(playerCards);
+            let counter = 0;
+            for (const c of [...playerCards]) {
+              counter = counter + c.value;
             }
-            </h2>
-            </>
+            if (counter === 21) {
+              prompt("du vann!");
+            } else if (counter > 21) {
+              prompt("du förlorade!");
+            }
+            console.log("counter",counter);
           }
-        </aside>)
+        )()
       } */}
-    {
-      card && <GameCard suit={card.suit} value={card.value}/>
-    }
+      {
+        (
+          () =>
+            {
+              console.log(dealerCards)
+            }
+        )()
+      }
+      <button onClick={() => setDeck([...deck].sort((a,b) => 0.5 - Math.random()))}>
+        Mix!
+      </button>
+      <button onClick={() => { 
+        let deckCopy = [...deck];
+        let randomDeckIndex = Math.floor(Math.random() * deck.length);
+        let randomCard = deckCopy.splice(randomDeckIndex, 1);
+        setPlayerCards([...playerCards].concat(randomCard));
+        setDeck(deckCopy);
+        
+       }}>
+        Draw!
+      </button>
+      <button onClick={() => {
+        let pCounter = 0;
+        for (const c of [...playerCards]) {
+          pCounter = pCounter + c.value;
+        }
+        if (pCounter === 21) {
+          alert("du vann!");
+          setShowAll(true);
+        } else if (pCounter > 21) {
+          alert("du förlorade!");
+          setShowAll(true);
+        } else {
+            let dCounter = 0;
+            for (const c of [...dealerCards]) {
+            dCounter = dCounter + c.value;
+          }
+            console.log("pCounter",pCounter);
+            console.log("dCounter",dCounter);
+            if (dCounter > pCounter){
+              alert("du förlorade!");
+              setShowAll(true);
+            } else if (dCounter < pCounter) {
+              alert("du vann!");
+              setShowAll(true);
+            } else if (dCounter == pCounter) {
+              alert("jämnt!");
+              setShowAll(true);
+            } else {
+              alert("jämnt!");
+              setShowAll(true);
+            }
+        }
+       }}>
+        Play!
+      </button>
+    <main className='table'>
+    <ul>
+      {
+        dealerCards.map((c, i) => <li key={i}>
+          <GameCard suit={c.suit} value={c.value} notVisible={(showAll ? !showAll : i)}/>
+        </li>)
+      }
+    </ul>
+    <ul>
+      {
+        playerCards.map((c, i) => <li key={i} onClick={() => console.log('test')}>
+          <GameCard suit={c.suit} value={c.value}/>
+      </li>)
+      }
+    </ul>
+    </main>
+    
     </div>
   );
 }

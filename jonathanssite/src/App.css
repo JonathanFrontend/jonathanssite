@@ -28,6 +28,44 @@
   color: #61dafb;
 }
 
+.table {
+  display: flex;
+  justify-content: center;
+}
+.table ul {
+  list-style: none;
+}
+
+.not-visible::before, .not-visible::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: "";
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.not-visible::before {
+  height: 100%;
+  width: 100%;
+  background-color: lightpink;
+}
+.not-visible::after {
+  height: 100px;
+  width: 100px;
+  background-color: red;
+  transform: rotate(45deg);
+  content: "";
+  /* top: 15%;
+  left: 8.5%; */
+  content: ' ';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -50px;
+  margin-top: -50px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -41,6 +79,8 @@
   width: 100px;
   margin: 10px auto;
   padding: 10px;
+  position: relative;
+  overflow: hidden;
 }
 
 .card-1, .card-2 {
