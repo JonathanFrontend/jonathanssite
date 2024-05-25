@@ -28,6 +28,18 @@
   color: #61dafb;
 }
 
+.header {
+
+}
+.header a {
+  background-color: #282c34;
+  padding: 1rem;
+  display: inline-block;
+}
+.header a:active {
+  background-color: #04AA6D;
+}
+
 .table {
   display: flex;
   justify-content: center;
